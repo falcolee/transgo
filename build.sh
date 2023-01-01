@@ -22,17 +22,17 @@ ldflags="\
 "
 
 if [ "$1" == "release" ]; then
-  gox -osarch="linux/amd64 windows/amd64 darwin/amd64" -output="transgo-{{.OS}}_{{.Arch}}" -ldflags="$ldflags"
+  gox -osarch="linux/386 linux/amd64 darwin/amd64 darwin/arm64" -output="transgo-{{.OS}}-{{.Arch}}" -ldflags="$ldflags"
 else
   go build -o "transgo" -ldflags="$ldflags"
 fi
 
 mkdir -p "bin"
-mv transgo* bin
+mv transgo-* bin
 cd bin || exit
 # compress file (release)
 if [ "$1" == "release" ]; then
-    mkdir compress
+    mkdir -p compress
     for i in `find . -type f -name "$appName-linux-*"`
     do
       tar -czvf compress/"$i".tar.gz "$i"

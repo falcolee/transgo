@@ -1,0 +1,24 @@
+version: 0.1
+cache:
+  useCache: true       	# 开启缓存
+  cacheStorage: 'memory'	# 缓存类型，支持memory/file/redis
+  storageDir: ''			# 文件缓存目录
+  redisAddr: ''			# redis连接地址，127.0.0.1:6379
+  redisPassword: ''		# redis密码
+  redisPrefix: ''		# redis前缀
+http:
+  server: ':32000'      # API启动端口
+engine:
+  default: 'baidu'      # 不指定时的默认翻译引擎，支持多个用,分割
+baidu:
+  appId: ''            # 百度接口ID
+  appSecret: ''        # 百度接口秘钥
+tencent:
+  appId: ''         # 腾讯接口ID
+  appSecret: ''        # 腾讯接口秘钥
+aliyun:
+  appId: ''         # 阿里云接口ID
+  appSecret: ''     # 阿里云接口秘钥
+volcengine:
+  appId: ''        # 火山接口ID
+  appSecret: ''        # 火山接口秘钥

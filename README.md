@@ -8,7 +8,7 @@
 * [头条火山翻译](https://www.volcengine.com/docs/4640/65067)
 
 ## 安装
-可使用`go install`命令
+可使用`go install`命令 或直接下载编译好的可执行文件 [Release](https://github.com/falcolee/transgo/releases)
 ```
 $ go install github.com/falcolee/transgo@latest
 ...
@@ -17,13 +17,13 @@ $ transgo -h
 ```
 
 ## 使用说明
-初次启动时默认会在程序根目录下创建名为`transgo.yaml`配置文件，修改配置文件中接口配置即可
+初次启动时如默认会在程序根目录下创建名为`transgo.yaml`配置文件，修改配置文件中接口配置即可
 
 ### 快速使用
 
-**指定目录创建配置**
+**指定目录生成配置**
 
-在当前用户根目录创建配置文件，程序会自动读取该目录下配置
+在当前用户根目录生成配置文件，程序会自动读取该目录下配置
 ```
 transgo -k ~
 ```
