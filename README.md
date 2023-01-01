@@ -8,7 +8,7 @@
 * [头条火山翻译](https://www.volcengine.com/docs/4640/65067)
 
 ## 安装
-可使用`go get`命令
+可使用`go install`命令
 ```
 $ go install github.com/falcolee/transgo@latest
 ...
