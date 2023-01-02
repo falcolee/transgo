@@ -40,6 +40,16 @@ transgo -w 你好啊 -e baidu
 ```
 ![multi](screenshots/multi.png)
 
+**cli指定语言翻译**
+
+`transgo`支持标准语言码，系统内部翻译引擎会自动转换为自家语言码，详见[Lingos语言代码表](http://www.lingoes.net/zh/translator/langcode.htm)
+
+```
+transgo -w 你好啊 -f zh -t ko
+```
+![ko](screenshots/ko.png)
+
+
 **启用API模式**
 
 ```
