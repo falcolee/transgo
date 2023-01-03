@@ -37,7 +37,7 @@ func RunEnumeration(options *common.TLOptions) {
 	outputfile.OutPutMergeInfo(options)
 }
 
-func RunJob(options *common.TLOptions) (infos []common.TranslateInfos, errors []error) {
+func RunJob(options *common.TLOptions) (infos []common.TranslateInfos, errors []string) {
 	if len(options.Engines) == 0 {
 		options.Engines = strings.Split(options.TLConfig.Engine.Default, ",")
 	}
@@ -46,7 +46,7 @@ func RunJob(options *common.TLOptions) (infos []common.TranslateInfos, errors []
 	}
 	gologger.Infof("文本:【%s】翻译引擎：%s \n", options.Text, strings.Join(options.Engines, ","))
 	infos = make([]common.TranslateInfos, 0)
-	errors = make([]error, 0)
+	errors = make([]string, 0)
 	var wg sync.WaitGroup
 	for _, v := range options.Engines {
 		if v == "" {
@@ -60,7 +60,7 @@ func RunJob(options *common.TLOptions) (infos []common.TranslateInfos, errors []
 				infos = append(infos, *transInfos)
 				outputfile.MergeOutPut(transInfos)
 			} else {
-				errors = append(errors, err)
+				errors = append(errors, err.Error())
 			}
 			wg.Done()
 		}()

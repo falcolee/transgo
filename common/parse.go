@@ -36,9 +36,9 @@ func Parse(options *TLOptions) {
 			f, _ := os.Create(defaultCfgYName) //创建文件
 			_, errs := io.WriteString(f, configYaml)
 			if errs != nil {
-				gologger.Errorf("配置文件创建失败 %s\n", errs)
+				gologger.Fatalf("配置文件创建失败 %s\n", errs)
 			} else {
-				gologger.Infof("配置文件生成成功\n")
+				gologger.Infof("配置文件生成成功，生成目录：%s\n", configDir)
 			}
 		}
 	} else {

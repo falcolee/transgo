@@ -144,6 +144,14 @@ volcengine:
 
 ```
 
+### Docker部署API
+ * `/app/conf` 配置文件目录
+ * `/app/cache` 文件缓存时需要配置的目录
+```
+docker run -d -v /your/conf:/app/conf -v /you/cache:/app/cache --name transgo -p 32000:32000 xiaogouxo/transgo:latest
+
+```
+
 ### 自编译
 **编译transgo**
 

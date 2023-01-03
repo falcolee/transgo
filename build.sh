@@ -33,6 +33,8 @@ cd bin || exit
 # compress file (release)
 if [ "$1" == "release" ]; then
     mkdir -p compress
+    rm compress/*.tar.gz
+    rm compress/*.zip
     for i in `find . -type f -name "$appName-linux-*"`
     do
       tar -czvf compress/"$i".tar.gz "$i"

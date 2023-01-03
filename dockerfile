@@ -7,7 +7,7 @@ WORKDIR /app
 
 VOLUME ["/app/conf","/app/cache"]
 
-COPY ./bin/transgo-linux_amd64 /app/transgo
+COPY ./bin/transgo-linux-amd64 /app/transgo
 
 # 设置时区为上海
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime

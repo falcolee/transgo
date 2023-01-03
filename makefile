@@ -1,4 +1,4 @@
 build:
 	sh ./build.sh
 docker:
-	docker build -t transgo/transgo:$(version) -t transgo/transgo:latest --build-arg version=$(version) .
+	docker build -t xiaogouxo/transgo:$(version) -t xiaogouxo/transgo:latest --build-arg version=$(version) .
