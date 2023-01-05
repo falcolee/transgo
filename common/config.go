@@ -28,6 +28,7 @@ type TLOptions struct {
 	SplitCache   bool      `cli:"split,y" usage:"开启全局缓存"`
 	CacheStorage string    `cli:"storage,m" usage:"缓存引擎，默认使用内存，支持memory/redis/file" dft:"memery"`
 	StorageDir   string    `cli:"dir,z" usage:"如开启文件缓存，需指定文件缓存目录"`
+	Retry        int       `cli:"retry,j" usage:"失败切换引擎重试次数，默认0不重试"`
 	TLConfig     *TLConfig `cli:"-"`
 }
 
@@ -56,7 +57,8 @@ type TLConfig struct {
 		Server string `yaml:"server"`
 	}
 	Engine struct {
-		Default string `yaml:"default"`
+		Default  string `yaml:"default"`
+		Fallback string `yaml:"fallback"`
 	}
 	Baidu struct {
 		AppId     string `yaml:"appId"`
@@ -93,8 +95,8 @@ var (
 	GitAuthor string
 	GitTag    string
 )
-var version = "0.1"
-var configYaml = `version: 0.1
+var version = "0.1.2"
+var configYaml = `version: 0.1.2
 cache:
   useCache: true       	# 开启缓存
   cacheStorage: 'memory'	# 缓存类型，支持memory/file/redis
@@ -106,6 +108,7 @@ http:
   server: ':32000'      # API启动端口
 engine:
   default: 'baidu'      # 不指定时的默认翻译引擎，支持多个用,分割
+  fallback: 'tencent'   # 失败时开启重试下使用的引擎，支持多个用,分割
 baidu:
   appId: ''            # 百度接口ID
   appSecret: ''        # 百度接口秘钥

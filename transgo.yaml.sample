@@ -10,6 +10,7 @@ http:
   server: ':32000'      # API启动端口
 engine:
   default: 'baidu'      # 不指定时的默认翻译引擎，支持多个用,分割
+  fallback: 'tencent'   # 失败时开启重试下使用的引擎，支持多个用,分割
 baidu:
   appId: ''            # 百度接口ID
   appSecret: ''        # 百度接口秘钥

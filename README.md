@@ -2,10 +2,10 @@
 一个多合一翻译接口聚合平台，支持`百度翻译`、`腾讯机器翻译`、`阿里云机器翻译`、`头条火山翻译`接口，提供cli和API接口两种查询方式，程序支持使用缓存，避免重复请求付费翻译接口，支持的缓存类型有`memory`、`redis`、`file`
 
 ## 接口文档
-* [百度翻译](https://fanyi-api.baidu.com/doc/21)
-* [腾讯机器翻译](https://cloud.tencent.com/document/product/551/15612)
-* [阿里云机器翻译](https://help.aliyun.com/document_detail/215387.html?spm=a2c4g.11186623.0.0.67612e50Jf1003)
-* [头条火山翻译](https://www.volcengine.com/docs/4640/65067)
+* [百度翻译](https://fanyi-api.baidu.com/doc/21) 单次汉字`2000`字符，每月标准版`5万`、高级版`100万`、尊享版`200万`免费
+* [腾讯机器翻译](https://cloud.tencent.com/document/product/551/15612) 单次`2000`字符，每月`500万`免费
+* [阿里云机器翻译](https://help.aliyun.com/document_detail/215387.html?spm=a2c4g.11186623.0.0.67612e50Jf1003) 单次`2000`字符，每月`100万`免费
+* [头条火山翻译](https://www.volcengine.com/docs/4640/65067) 单次`5000`字符，每月`200万`免费
 
 ## 安装
 可使用`go install`命令 或直接下载编译好的可执行文件 [Release](https://github.com/falcolee/transgo/releases)
@@ -116,40 +116,15 @@ Options:
 
 ### 配置文件范例
 系统默认读取`$HOME`用户根目录或当前程序目录下的`transgo.yaml`
-```
-version: 0.1
-cache:
-  useCache: true       	# 开启缓存
-  cacheStorage: 'file'	# 缓存类型，支持memory/file/redis
-  storageDir: '/some/path/cache'			# 文件缓存目录
-  redisAddr: ''			# redis连接地址，127.0.0.1:6379
-  redisPassword: ''		# redis密码
-  redisPrefix: ''
-http:
-  server: ':31000'      # API启动端口
-engine:
-  default: 'baidu'      # 默认翻译引擎，多个用,分割
-baidu:
-  appId: ''            # 百度接口ID
-  appSecret: ''        # 百度接口秘钥
-tencent:
-  appId: ''         # 腾讯接口ID
-  appSecret: ''        # 腾讯接口秘钥
-aliyun:
-  appId: ''         # 阿里云接口ID
-  appSecret: ''     # 阿里云接口秘钥
-volcengine:
-  appId: ''        # 火山接口ID
-  appSecret: ''        # 火山接口秘钥
 
-```
+[范例下载](https://raw.githubusercontent.com/falcolee/transgo/main/transgo.yaml.sample)
+保存后去除文件名`.sample`后缀
 
 ### Docker部署API
  * `/app/conf` 配置文件目录
  * `/app/cache` 文件缓存时需要配置的目录
 ```
 docker run -d -v /your/conf:/app/conf -v /you/cache:/app/cache --name transgo -p 32000:32000 xiaogouxo/transgo:latest
-
 ```
 
 ### 自编译

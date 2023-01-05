@@ -37,21 +37,43 @@ func RunEnumeration(options *common.TLOptions) {
 	outputfile.OutPutMergeInfo(options)
 }
 
-func RunJob(options *common.TLOptions) (infos []common.TranslateInfos, errors []string) {
+func RunJobWithRetry(options *common.TLOptions) (infos []common.TranslateInfos, errors []error) {
+	if options.Retry > 0 {
+		for i := 0; i < options.Retry; i++ {
+			infos, errors = RunJob(options)
+			if len(errors) == 0 {
+				break
+			}
+			fallbackEngins := strings.Split(options.TLConfig.Engine.Fallback, ",")
+			if utils.CheckList(fallbackEngins) {
+				for _, fallbackEngine := range fallbackEngins {
+					if !utils.InStrArray(fallbackEngine, options.Engines) {
+						options.Engines = []string{fallbackEngine}
+					}
+				}
+			}
+		}
+	} else {
+		infos, errors = RunJob(options)
+	}
+	return
+}
+
+func RunJob(options *common.TLOptions) (infos []common.TranslateInfos, errors []error) {
 	if len(options.Engines) == 0 {
 		options.Engines = strings.Split(options.TLConfig.Engine.Default, ",")
+	}
+	if !utils.CheckList(options.Engines) {
+		options.Engines = []string{"baidu"}
 	}
 	if len(options.Engines) > 1 {
 		options.SplitCache = true
 	}
 	gologger.Infof("文本:【%s】翻译引擎：%s \n", options.Text, strings.Join(options.Engines, ","))
 	infos = make([]common.TranslateInfos, 0)
-	errors = make([]string, 0)
+	errors = make([]error, 0)
 	var wg sync.WaitGroup
 	for _, v := range options.Engines {
-		if v == "" {
-			continue
-		}
 		wg.Add(1)
 		var domain = v
 		go func() {
@@ -60,7 +82,7 @@ func RunJob(options *common.TLOptions) (infos []common.TranslateInfos, errors []
 				infos = append(infos, *transInfos)
 				outputfile.MergeOutPut(transInfos)
 			} else {
-				errors = append(errors, err.Error())
+				errors = append(errors, err)
 			}
 			wg.Done()
 		}()
@@ -73,7 +95,6 @@ func Translate(domain string, options *common.TLOptions) (*common.TranslateInfos
 	transKey := fmt.Sprintf("TranslateK_%s_%s_%s", options.Text, options.FromLanguage, options.ToLanguage)
 	transEngineKey := fmt.Sprintf("TranslateK_%s_%s_%s_%s", options.Text, options.FromLanguage, options.ToLanguage, domain)
 	length := utf8.RuneCountInString(options.Text)
-
 	translateInfos := &common.TranslateInfos{
 		Text:         options.Text,
 		FromLanguage: options.FromLanguage,
@@ -109,6 +130,7 @@ func Translate(domain string, options *common.TLOptions) (*common.TranslateInfos
 		gologger.Errorf("文本:【%s】翻译失败：%s \n", options.Text, err)
 		return translateInfos, err
 	}
+
 	if options.UseCache && result != "" {
 		if options.SplitCache {
 			err = cache.Storage.Store(transEngineKey, []byte(result))

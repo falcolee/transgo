@@ -1,6 +1,7 @@
 package api
 
 import (
+	"strconv"
 	"strings"
 
 	"github.com/falcolee/transgo/common"
@@ -37,9 +38,16 @@ func RunApiWeb(options *common.TLOptions) {
 		options.Engines = engineList
 		from := c.PostForm("from")
 		to := c.PostForm("to")
+		retry := c.PostForm("retry")
+		if retry != "" {
+			retryInt, _ := strconv.Atoi(retry)
+			if retryInt > 0 {
+				options.Retry = retryInt
+			}
+		}
 		options.FromLanguage = from
 		options.ToLanguage = to
-		infos, errs := runner.RunJob(options)
+		infos, errs := runner.RunJobWithRetry(options)
 		c.JSON(200, gin.H{
 			"code":    200,
 			"message": "OK",
